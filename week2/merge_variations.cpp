@@ -1,4 +1,4 @@
-#include <iostream>
+include <iostream>
 #include <vector>
 using namespace std;
 
@@ -52,7 +52,7 @@ int_v merge_noDuplicates(int_v A, int_v B) {
       C.push_back(B.at(j));
       j++;
     } else if (A.at(i) == B.at(j)) {
-      if (A.at(i) != C.back)
+      if (A.at(i) != C.back())
         C.push_back(A.at(i));
       i++;
       j++;
