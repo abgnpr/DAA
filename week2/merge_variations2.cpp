@@ -14,7 +14,7 @@ int_v merge_simple(int_v A, int_v B) {
   int_v C;
 
   while (i < m && j < n) {
-    if (A.at(i) < B.at(j)) {
+    if (A.at(i) <= B.at(j)) {
       C.push_back(A.at(i));
       i++;
     } else if (A.at(i) > B.at(j)) {
@@ -52,7 +52,8 @@ int_v merge_noDuplicates(int_v A, int_v B) {
       C.push_back(B.at(j));
       j++;
     } else if (A.at(i) == B.at(j)) {
-      C.push_back(A.at(i));
+      if (A.at(i) != C.back)
+        C.push_back(A.at(i));
       i++;
       j++;
     }
@@ -60,11 +61,13 @@ int_v merge_noDuplicates(int_v A, int_v B) {
 
   while (i < m || j < n) {
     if (i < m) {
-      C.push_back(A.at(i));
+      if (A.at(i) != C.back())
+        C.push_back(A.at(i));
       i++;
     }
     if (j < n) {
-      C.push_back(B.at(j));
+      if (B.at(j) != C.back())
+        C.push_back(B.at(j));
       j++;
     }
   }
@@ -73,20 +76,21 @@ int_v merge_noDuplicates(int_v A, int_v B) {
 }
 
 void print_vec(int_v V) {
-  cout << "\n\n";
   for (int i = 0; i < V.size(); ++i)
-    cout << "| "<< V.at(i) << " ";
-  cout << "|";
-  cout << "\n\n";
+    cout << "| " << V.at(i) << " ";
+  cout << "|\n";
 }
 
 int main() {
 
-  int_v A = {2, 5, 7}, B = {1, 4, 5, 6};
-  // int_v C = merge_simple(A, B);
+  int_v A = {2, 8, 8, 8}, B = {1, 4, 8, 8};
+  int_v C = merge_simple(A, B);
   int_v D = merge_noDuplicates(A, B);
 
-  // print_vec(C);
+  cout << "\n";
+  print_vec(C);
+  cout << "\n";
   print_vec(D);
+  cout << "\n";
   return 0;
 }
