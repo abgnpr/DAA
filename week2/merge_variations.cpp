@@ -6,7 +6,7 @@ typedef vector<int> int_v;
 
 // MERGE VARIATIONS
 
-int_v merge_simple(int_v A, int_v B) {
+int_v simple_merge(int_v A, int_v B) {
 
   int i = 0, j = 0, k = 0;
   int m = A.size(), n = B.size();
@@ -37,7 +37,8 @@ int_v merge_simple(int_v A, int_v B) {
   return C;
 }
 
-int_v merge_noDuplicates(int_v A, int_v B) {
+/* Union of two unsorted lists */
+int_v union_OF(int_v A, int_v B) {
 
   int i = 0, j = 0, k = 0;
   int m = A.size(), n = B.size();
@@ -48,12 +49,13 @@ int_v merge_noDuplicates(int_v A, int_v B) {
     if (A.at(i) < B.at(j)) {
       C.push_back(A.at(i));
       i++;
+
     } else if (A.at(i) > B.at(j)) {
       C.push_back(B.at(j));
       j++;
+
     } else if (A.at(i) == B.at(j)) {
-      if (A.at(i) != C.back())
-        C.push_back(A.at(i));
+      C.push_back(A.at(i));
       i++;
       j++;
     }
@@ -75,6 +77,33 @@ int_v merge_noDuplicates(int_v A, int_v B) {
   return C;
 }
 
+/* Intersection of two unsorted lists */
+int_v intersection_OF(int_v A, int_v B) {
+
+  int i = 0, j = 0, k = 0;
+  int m = A.size(), n = B.size();
+
+  int_v C;
+
+  while (i < m && j < n) {
+    if (A.at(i) < B.at(j)) {
+      i++;
+
+    } else if (A.at(i) > B.at(j)) {
+      j++;
+
+    } else if (A.at(i) == B.at(j)) {
+      C.push_back(A.at(i));
+      i++;
+      j++;
+    }
+  }
+
+  return C;
+}
+
+
+
 void print_vec(int_v V) {
   for (int i = 0; i < V.size(); ++i)
     cout << "| " << V.at(i) << " ";
@@ -83,14 +112,20 @@ void print_vec(int_v V) {
 
 int main() {
 
-  int_v A = {2, 8, 8, 8}, B = {1, 4, 8, 8};
-  int_v C = merge_simple(A, B);
-  int_v D = merge_noDuplicates(A, B);
+  int_v A = {2, 4, 8}; 
+  int_v B = {1, 4, 5, 8};
+  
+  int_v C = simple_merge(A, B);
+  int_v D = union_OF(A, B);
+  int_v E = intersection_OF(A, B);
 
   cout << "\n";
   print_vec(C);
   cout << "\n";
   print_vec(D);
   cout << "\n";
+  print_vec(E);
+  cout << "\n";
+
   return 0;
 }
