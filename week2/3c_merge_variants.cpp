@@ -4,7 +4,7 @@ using namespace std;
 
 typedef vector<int> int_v;
 
-// MERGE VARIATIONS
+// MERGE variants
 
 int_v simple_merge(int_v A, int_v B) {
 
@@ -63,13 +63,11 @@ int_v union_OF(int_v A, int_v B) {
 
     while (i < m || j < n) {
         if (i < m) {
-            if (A.at(i) != C.back())
-                C.push_back(A.at(i));
+            C.push_back(A.at(i));
             i++;
         }
         if (j < n) {
-            if (B.at(j) != C.back())
-                C.push_back(B.at(j));
+            C.push_back(B.at(j));
             j++;
         }
     }
@@ -147,8 +145,11 @@ int main() {
     // int_v A = {1, 2, 3, 4, 8};
     // int_v B = {1, 4, 5, 8};
 
-    int_v A = {1, 3, 5, 7};
-    int_v B = {2, 4, 6, 7};
+    // int_v A = {1, 3, 5, 7, 8};
+    // int_v B = {2, 4, 6, 7, 8};
+
+    // int_v A = {2};
+    // int_v B = {};
 
     int_v C = simple_merge(A, B);
     int_v D = union_OF(A, B);
