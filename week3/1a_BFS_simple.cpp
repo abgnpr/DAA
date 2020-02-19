@@ -1,3 +1,10 @@
+/* 
+
+BFS usaing a simple graph structure having
+vertices(vertex set:V) and edges (edge set:E)
+
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -8,7 +15,6 @@ struct graph
     set<int> V;             // VERTEX SET
     set<pair<int,int>> E;   // EDGE SET
 };
-
 
 /* BFS starting from vertex i */
 bool BFS(graph G, int startVertex, int endVertex) {
@@ -33,6 +39,7 @@ bool BFS(graph G, int startVertex, int endVertex) {
     while (!vertices_toBeExplored.empty()) {
         for (auto edge : G.E) {
             int v1 = edge.first, v2 = edge.second;
+            // Scan the neighbours of v1
             if (vertices_toBeExplored.front() == v1  &&
                 vistingRecord.at(v2) == NOT_VISITED) {
                 vistingRecord.at(v2) = VISITED;
@@ -60,28 +67,8 @@ int main() {
         {5, 7}, {6, 7}, {6, 8}, {6, 9}, {8, 9}, {9, 10}
     };
 
-    BFS(mapOfIndia, 1, 10)? cout << "YES" : cout << "NO";
+    BFS(mapOfIndia, 1, 10)? cout << "reachable" : cout << "unrachable";
     cout << "\n";
-
-    // // adjacency list
-    // list_of_list adj_list = {
-    //     {1, 2, 3},
-    //     {1, 3},
-    //     {1, 2},
-    //     {1, 5, 8},
-    //     {4, 6, 7},
-    //     {5, 7, 8, 9},
-    //     {5, 6},
-    //     {4, 6, 9},
-    //     {6, 8, 10},
-    //     { 9 },
-    // };
-
-    // for (auto vertex : adj_list) {
-    //     for(auto neighbours : vertex)
-    //         cout << neighbours << " ";
-    //     cout << "\n";
-    // }
 
     return EXIT_SUCCESS;
 }
