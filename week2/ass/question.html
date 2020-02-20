@@ -1,0 +1,132 @@
+<div style="display: inline-block;font-size:16px;padding-bottom: 7px;">
+
+  <hr>
+  <h1>Moving Intervals</h1>
+
+  <p><em><a href="https://www.iarcs.org.in/inoi/2018/" target="_blank">Zonal Computing Olympiad 2018</a></em>
+  </p>
+
+  <p>
+    There are <b>C</b> cakes in a row, numbered from 1 to
+    <b>C</b>. There are <b>N</b> children, each of whom have selected
+    a consecutive set of cakes to eat. That is, Child i has decided
+    to eat all the cakes from <b>S<sub>i</sub></b> to
+    <b>E<sub>i</sub></b>, end points inclusive. If there is a cake
+    which appears in some two childrens' set, then they will fight
+    because both of them want to eat that cake, and you don't want
+    that to happen.
+  </p>
+
+  <p>
+    You will be given an integer <b>K</b> which will be either 0 or
+    1. If <b>K </b>is 0, then you should find out if some two
+    children will fight. Print "Good" if no one fights, and "Bad" if
+    someone fights.
+  </p>
+
+  <p>
+    If <b>K</b> is 1, then you can persuade at most one child to
+    change his decision to some other set of cakes. But the number of
+    cakes that he eats must be the same. That is, if Child i had
+    initially decided that he wants to eat the cakes from
+    <b>S<sub>i</sub></b> to <b>E<sub>i</sub></b>, then you could
+    persuade the child to instead eat the cakes from X to Y instead,
+    for any valid X and Y (ie. 1 ≤ X ≤ Y ≤ <b>C</b>),
+    provided that the number of cakes is the same
+    (ie. <b>E<sub>i</sub></b> - <b>S<sub>i</sub></b> + 1 = Y - X +
+    1). If after persuading at most 1 Child to change his decision,
+    no fights happen, then print "Good". But if no matter what you
+    do, someone will fight, then print "Bad".
+  </p>
+
+
+  <h2>Solution hint</h2>
+
+  <p>
+    Sort the intervals and check for overlaps.
+  </p>
+
+  <h2>Input format</h2>
+
+  <p>
+    The first line of each test case contains three integers
+    <b>C</b>, <b>N</b> and <b>K</b> denoting the number of cakes,
+    number of children and <b>K</b>, respectively.</p>
+
+  <p>The i-th of the next <b>N</b> lines contains two space
+    separated integers <b>S<sub>i</sub></b> and <b>E<sub>i</sub></b>
+    which denotes the initial decision of Child i. That is, Child i
+    wants to eat from cake <b>S<sub>i</sub></b> to cake
+    <b>E<sub>i</sub></b>.</p>
+
+  <p></p>
+
+  <h2>Output format</h2>
+
+  <p>
+    For each test case, output a single line containing "Good" or
+    "Bad".
+  </p>
+
+  <h3>Constraints</h3>
+  <ul>
+    <li>1 ≤ <b>T</b> ≤ 10</li>
+    <li>1 ≤ <b>C</b> ≤ 10<sup>9</sup></li>
+    <li>1 ≤ <b>N</b> ≤ 10<sup>5</sup></li>
+    <li>0 ≤ <b>K</b> ≤ 1</li>
+    <li>1 ≤ <b>S<sub>i</sub></b>, <b>E<sub>i</sub></b> ≤ <b>C</b></li>
+  </ul>
+
+  <h2>Sample input 1</h2>
+
+  <pre>5 2 0
+2 2
+3 5
+</pre>
+
+  <h2>Sample output 1</h2>
+
+  <pre>Good
+</pre>
+
+  <h2>Sample input 2</h2>
+
+  <pre>5 2 1
+2 2
+2 5
+</pre>
+
+  <h2>Sample output 2</h2>
+
+  <pre>Good
+</pre>
+
+  <h2>Sample input 3</h2>
+
+  <pre>5 2 1
+2 3
+2 5
+</pre>
+
+  <h2>Sample output 3</h2>
+
+  <pre>Bad
+</pre>
+
+  <h3>Explanation</h3>
+
+  <p><b>Sample 1:</b> Child 1 wants to eat the second cake, and Child 2 wants to eat Cakes 3, 4 and 5. So there is no
+    fight, and the answer is "Good".</p>
+
+  <p><b>Sample 2:</b> Child 1 wants to eat Cake 2, and Child 2 wants to eat Cakes 2, 3, 4 and 5. Both of them want to
+    eat Cake 2, and hence it could lead to a fight. But because <b>K</b> = 1, we can persuade one of the children to
+    change their decision. For instance, we could persuade Child 1 to change his decision from [2, 2] to [1, 1]. After
+    this, there is no fight, and the hence answer is "Good".</p>
+
+  <p><b>Sample 3:</b> Child 1 wants to eat Cake 2 and Cake 3, and Child 2 wants to eat Cakes 2, 3, 4 and 5. Both of them
+    want to eat Cakes 2 and 3, and hence it could lead to a fight. And because <b>K</b> = 1, we can persuade one of the
+    children to change their decision. For instance, we could persuade Child 1 to change his decision from [2, 3] to [1,
+    2]. But even after this, both of them want to eat Cake 2. You can verify that no matter how we persuade at most 1
+    child, they will end up fighting. Hence the answer is "Bad".</p>
+
+</div>
