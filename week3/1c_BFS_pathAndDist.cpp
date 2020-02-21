@@ -1,48 +1,61 @@
-/* 
+/*
 
  * BFS using a graph stucture employing an
  * adjacency list.
 
  * Checking connectivity
+ * Identifying a path
+ * Recording distance (steps)
 
 */
 
 #include "Graph.h"
 #include <iostream>
-#include <queue>
 #include <map>
+#include <queue>
 
 bool BFS(Graph G, int startVertex, int endvertex) {
 
-    /* Vetices that have been visited */
     map<int, bool> vistingRecord;
     #define VISITED true
     #define NOT_VISITED false
 
-    // Initialization
-    for (const int vertex : G.V)
-        vistingRecord.insert({vertex, NOT_VISITED});
-
-    /* Vertices that have been visited but
-     * not yet explored */
     queue<int> vertices_toBeExplored;
 
-    // Start exploration at ``startVertex`
+    map<int, int> levels, parents;
+    #define NOT_DEFINED -1
+
+    for (const int vertex : G.V) {
+        vistingRecord.insert({vertex, NOT_VISITED});
+        levels.insert({vertex, NOT_DEFINED});
+        parents.insert({vertex, NOT_DEFINED});
+    }
+
     vistingRecord.at(startVertex) = VISITED;
     vertices_toBeExplored.push(startVertex);
 
     adj_list AL = G.get_adjList();
 
-    // Explore each vertex in Q
+    int vertex_beingExplored, level = 0;
+    dest_list neighbours;
+
+    levels.at(startVertex) = level++;
     while (!vertices_toBeExplored.empty()) {
-        int vertex_beingExplored = vertices_toBeExplored.front();
-        for (int neighbour : AL.at(vertex_beingExplored))
+        vertex_beingExplored = vertices_toBeExplored.front();
+        neighbours = AL.at(vertex_beingExplored);
+        for (int neighbour : neighbours)
             if (vistingRecord.at(neighbour) == NOT_VISITED) {
                 vistingRecord.at(neighbour) = VISITED;
+                parents.at(neighbour) = vertex_beingExplored;
+                levels.at(neighbour) = level;
                 vertices_toBeExplored.push(neighbour);
             }
         vertices_toBeExplored.pop();
+        level += 1;
     }
+
+    
+    for (auto l = levels.cbegin(), l_end = levels)
 
     return vistingRecord.at(endvertex);
 }

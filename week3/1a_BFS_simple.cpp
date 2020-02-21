@@ -1,7 +1,10 @@
 /* 
 
-BFS usaing a simple graph structure having
-vertices(vertex set:V) and edges (edge set:E)
+ * BFS usaing a simple graph structure 
+ * having vertices(in vertex set:V) and 
+ * edges ( in edge set:E)
+
+ * Checking connectivity
 
 */
 
