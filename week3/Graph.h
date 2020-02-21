@@ -64,7 +64,7 @@ class Graph {
     }
 
   public:
-    Graph() { isUndirected = false; }
+    Graph() { isUndirected = true; }
 
     set<int> V; // VERTEX SET
     // set<pair<int,int>> E; // EDGE SET
@@ -80,7 +80,7 @@ class Graph {
     }
 
     void print_AdjList() {
-        cout << "\n";
+        cout << "\nAdjacency List\n";
         for (const auto i : AL) {
             cout << "[" << i.first << "] : ";
             if (i.second.empty())

@@ -10,11 +10,12 @@
 */
 
 #include "Graph.h"
-#include <iostream>
+#include <cstdio>
 #include <map>
 #include <queue>
+#include <stack>
 
-bool BFS(Graph G, int startVertex, int endvertex) {
+void BFS(Graph G, const int startVertex, const int endVertex) {
 
     map<int, bool> vistingRecord;
     #define VISITED true
@@ -36,29 +37,51 @@ bool BFS(Graph G, int startVertex, int endvertex) {
 
     adj_list AL = G.get_adjList();
 
-    int vertex_beingExplored;
+    int v;
     dest_list neighbours;
 
     levels.at(startVertex) = 0;
     while (!vertices_toBeExplored.empty()) {
-        vertex_beingExplored = vertices_toBeExplored.front();
-        neighbours = AL.at(vertex_beingExplored);
+        v = vertices_toBeExplored.front();
+        neighbours = AL.at(v);
         for (int neighbour : neighbours)
             if (vistingRecord.at(neighbour) == NOT_VISITED) {
                 vistingRecord.at(neighbour) = VISITED;
                 vertices_toBeExplored.push(neighbour);
-                parents.at(neighbour) = vertex_beingExplored;
-                levels.at(neighbour) = levels.at(vertex_beingExplored)+1;
+                parents.at(neighbour) = v;
+                levels.at(neighbour) = levels.at(v) + 1;
             }
         vertices_toBeExplored.pop();
     }
 
-    cout << "\nV  L  P\n";
-    for (int v : G.V)
-        cout << v << "  " << levels.at(v) << "  " << parents.at(v) << "\n";
-    cout << "\n";
+    // reachability and shortest path
+    if (vistingRecord.at(endVertex)) {
 
-    return vistingRecord.at(endvertex);
+        printf("\nReachable : YES\n\n");
+
+        v = endVertex;
+        stack<int> path_list;
+        do {
+            path_list.push(v);
+        } while ((v = parents.at(v)) != NOT_DEFINED);
+
+        printf("Path : [%d]", path_list.top());
+        path_list.pop();
+        while (!path_list.empty()) {
+            printf(" -> [%d]", path_list.top());
+            path_list.pop();
+        }
+
+        printf("\n");
+        printf("\nSteps : %d\n", levels.at(endVertex));
+
+    } else
+        printf("\nReachable : NO\n");
+
+    printf("\nvertex\tparent\tlevel\tvisited\n");
+    for (int v : G.V)
+        printf("%2d\t%2d\t%2d\t%2d\n", 
+            v, parents.at(v), levels.at(v),vistingRecord.at(v));
 }
 
 int main() {
@@ -79,12 +102,18 @@ int main() {
     G.add(6, 9);
     G.add(8, 9);
     G.add(9, 10);
+    G.add(11);
 
-    cout << "\n";
-    BFS(G, 1, 10) ? cout << "rechable" : cout << "unreachable";
-    cout << "\n";
+    int startVertex, endVertex;
 
-    // G.print_AdjList();
+    printf("\nstartVertex  :  ");
+    scanf("%d", &startVertex);
+    printf("endVertex    :  ");
+    scanf("%d", &endVertex);
+
+    BFS(G, startVertex, endVertex);
+
+    G.print_AdjList();
 
     return EXIT_SUCCESS;
 }
