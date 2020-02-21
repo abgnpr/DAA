@@ -36,26 +36,27 @@ bool BFS(Graph G, int startVertex, int endvertex) {
 
     adj_list AL = G.get_adjList();
 
-    int vertex_beingExplored, level = 0;
+    int vertex_beingExplored;
     dest_list neighbours;
 
-    levels.at(startVertex) = level++;
+    levels.at(startVertex) = 0;
     while (!vertices_toBeExplored.empty()) {
         vertex_beingExplored = vertices_toBeExplored.front();
         neighbours = AL.at(vertex_beingExplored);
         for (int neighbour : neighbours)
             if (vistingRecord.at(neighbour) == NOT_VISITED) {
                 vistingRecord.at(neighbour) = VISITED;
-                parents.at(neighbour) = vertex_beingExplored;
-                levels.at(neighbour) = level;
                 vertices_toBeExplored.push(neighbour);
+                parents.at(neighbour) = vertex_beingExplored;
+                levels.at(neighbour) = levels.at(vertex_beingExplored)+1;
             }
         vertices_toBeExplored.pop();
-        level += 1;
     }
 
-    
-    for (auto l = levels.cbegin(), l_end = levels)
+    cout << "\nV  L  P\n";
+    for (int v : G.V)
+        cout << v << "  " << levels.at(v) << "  " << parents.at(v) << "\n";
+    cout << "\n";
 
     return vistingRecord.at(endvertex);
 }
@@ -83,7 +84,7 @@ int main() {
     BFS(G, 1, 10) ? cout << "rechable" : cout << "unreachable";
     cout << "\n";
 
-    G.print_AdjList();
+    // G.print_AdjList();
 
     return EXIT_SUCCESS;
 }
