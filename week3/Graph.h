@@ -84,7 +84,7 @@ class Graph {
 
     void add(Edges E) {
         for (Edge e : E)
-            putVertexIn_AdjList(e.v1, e.v2);
+            putEdgeIn_AdjList(e.v1, e.v2);
         refresh();
     }
 
