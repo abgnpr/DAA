@@ -6,6 +6,7 @@ an adjacency list.
 */
 
 #include <iostream>
+#include <vector>
 #include <map>
 #include <set>
 
@@ -13,6 +14,8 @@ using namespace std;
 
 typedef set<int> dest_list;
 typedef map<int, dest_list> adj_list;
+struct Edge { int v1, v2; };
+typedef vector<Edge> Edges;
 
 class Graph {
 
@@ -64,7 +67,7 @@ class Graph {
     }
 
   public:
-    Graph() { isUndirected = true; }
+    Graph() { isUndirected = false; }
 
     set<int> V; // VERTEX SET
     // set<pair<int,int>> E; // EDGE SET
@@ -76,6 +79,12 @@ class Graph {
 
     void add(int v) {
         putVertexIn_AdjList(v);
+        refresh();
+    }
+
+    void add(Edges E) {
+        for (Edge e : E)
+            putVertexIn_AdjList(e.v1, e.v2);
         refresh();
     }
 

@@ -1,6 +1,6 @@
 /*
 
- * BFS using a graph stucture employing an
+ * BFS using a graph stucture employing
  * adjacency list.
 
  * Checking connectivity
