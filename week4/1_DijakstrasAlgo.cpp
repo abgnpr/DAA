@@ -21,8 +21,10 @@ bool anotherUnburnt(map<int, int> burnt, int &fistUnburntVertex) {
 }
 
 void shortestPath (Graph G, int sourceVertex) {
-    
-    map<int, int> burnt, EBT /* Estimated Burn Time */;
+
+    map<int, int>
+        burnt, // lsit of burnt vertices
+        EBT; // Estimated Burn Time
 
     adj_list AL = G.get_adjList();
 
@@ -30,6 +32,7 @@ void shortestPath (Graph G, int sourceVertex) {
     for (auto i : AL)
         for (auto j : i.second)
             sumOf_weights += j.w;
+    sumOf_weights++;
 
     for (int v : G.V) {
         burnt.insert({v, 0});
@@ -47,7 +50,7 @@ void shortestPath (Graph G, int sourceVertex) {
                 u = ver;
 
         burnt[u] = 1;
-        
+
         // recompute expected burn time for each neighbour of u
         for (dest_nd_weight_pair k : AL[u]) {
             int v = k.dest_v;

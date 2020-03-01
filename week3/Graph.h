@@ -67,7 +67,7 @@ class Graph {
     }
 
   public:
-    Graph() { isUndirected = false; }
+    Graph() { isUndirected = true; }
 
     set<int> V; // VERTEX SET
     // set<pair<int,int>> E; // EDGE SET

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div style="display: inline-block;font-size:16px;padding-bottom: 7px;">
+        <h1>Padayatra</h1>
+
+        <p><em>(IOI Training Camp, 2004)</em> </p>
+
+        <p>The exit polls indicate that the sitting MLA is likely to lose the
+            upcoming election. The party high command instructs him to undertake
+            a padayatra through his constituency to boost his popularity. To
+            maximize coverage of the constituency, the party decides that he
+            should choose a circular route that returns to the starting point
+            without using any road twice. The route need not visit all the towns
+            and villages in the constituency.</p>
+
+        <p>Being averse to physical exercise, the MLA would like to minimize the
+            distance that he has to walk. He has a helicopter at his disposal, so
+            he can begin the padayatra at any town or village.</p>
+
+        <p>The task is to help him find the shortest circular route. You are
+            guaranteed that there is always at least one circular route.</p>
+
+        <h2>Solution Hint</h2>
+
+        <p> Given an edge (i,j) with weight W(i,j), the shortest cycle
+            from i to i via j can be found by temporarily deleting the edge
+            (i,j), finding the shortest path from j to i, and then adding
+            W(i,j) to the length of this path. Do this systematically to
+            find the shortest cycle in the graph.</p>
+
+        <h2>Input format</h2>
+
+        <p>The first line of input is an integer N, 1 ≤ N ≤ 1000, the
+            number of roads in the constituency. The constituency has no more
+            than 300 towns and villages connected by roads. </p>
+
+        <p>The next N lines specify the roads. Each line consists of three
+            space separated integers S, T and D where S is the starting
+            point of the road, T is the ending point and D is the length of
+            the road. Each road is a two-way road and is listed exactly
+            once, in one of the two directions.</p>
+
+
+        <h2>Output format</h2>
+
+        <p>
+            A single line with the integer distance around the shortest possible
+            circular route.
+        </p>
+
+
+        <h2>Test data</h2>
+
+        <p>
+            There are at most 300 towns and villages and at most 1000 roads.
+        </p>
+
+        <h2>Example</h2>
+
+        <h2>Sample Input</h2>
+
+        <pre>4
+3 1 5
+1 2 4
+3 2 3
+1 5 44
+</pre>
+
+        <h2>Sample output 1</h2>
+
+        <pre>12
+</pre>
+
+
+
+    </div>
+    <div style="width: 83%; padding-top: 5px;">
+        <div style="border: solid 1px grey;">
+            <div style="padding-left:5px;">
+
+
+
+
+
+                <div>
+                    <label style="font-size:15px;">
+                        Sample Test Cases
+                    </label>
+                </div>
+                <br style="
+content: '';
+line-height: 22px;
+display: block;
+margin: -2px 0px;
+">
+                <table class="gcb-sample-input-table" style="width:100%;">
+                    <tbody>
+                        <tr class="gcb-sample-input-table-heading">
+                            <td></td>
+                            <td>Input</td>
+                            <td>Output</td>
+                        </tr>
+
+                        <tr class="gcb-output-not-evaluated">
+                            <td class="gcb-testcase-number">
+                                Test Case 1
+                            </td>
+                            <td class="gcb-testcase">
+
+                                <pre class="gcb-testcase">4
+3 1 5
+1 2 4
+3 2 3
+1 5 44
+</pre>
+
+                            </td>
+                            <td>
+
+                                <pre class="gcb-testcase">12
+</pre>
+
+                            </td>
+                        </tr>
+<br>
+                        <tr class="gcb-output-not-evaluated">
+                            <td class="gcb-testcase-number">
+                                Test Case 2
+                            </td>
+                            <td class="gcb-testcase">
+
+                                <pre class="gcb-testcase">7
+3 1 11
+6 1 12
+6 4 52
+6 2 17
+5 2 14
+4 5 13
+3 4 10
+</pre>
+
+                            </td>
+                            <td>
+
+                                <pre class="gcb-testcase">77
+</pre>
+
+                            </td>
+                        </tr>
+<br>
+                        <tr class="gcb-output-not-evaluated">
+                            <td class="gcb-testcase-number">
+                                Test Case 3
+                            </td>
+                            <td class="gcb-testcase">
+
+                                <pre class="gcb-testcase">10
+6 1 13
+6 3 17
+5 3 18
+8 5 11
+8 7 19
+6 8 85
+8 4 92
+7 2 15
+4 2 13
+4 1 10
+</pre>
+
+                            </td>
+                            <td>
+
+                                <pre class="gcb-testcase">116
+</pre>
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <br>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
