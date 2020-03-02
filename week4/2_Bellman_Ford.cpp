@@ -25,7 +25,7 @@ void BellmanFord(const adj_list &AL, int startVertex) {
 
     Distance[startVertex] = 0;
 
-    for (int i = 1; i <= n + 1; ++i)
+    for (int i = 1; i <= n - 1; ++i)
         for (auto &[u, DL] : AL)
             for (auto &[v, w] : DL)
                 Distance[v] = min(Distance[v], Distance[u] + w);
