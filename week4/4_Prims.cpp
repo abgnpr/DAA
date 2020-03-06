@@ -52,6 +52,9 @@ void Prim(const adj_list &AL) {
                 if (Dist_TV[v] > w) {
                     Dist_TV[v] = w;
                     Nbr_TV
+                    /* 
+                    ***** HEAP REQUIRED ******
+                     */
                 }
             }
         }
