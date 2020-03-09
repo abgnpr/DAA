@@ -1,6 +1,6 @@
 /*
 
- * BINARY Tree
+ * BALANCED BINARY TREE
 
  * Insert
 
@@ -25,16 +25,22 @@
 
 struct BTree
 {
-    int value;
+    int value, height;
     BTree *parent, *left, *right;
 };
 
-BTree*
-newNode(int val, BTree* parent = NULL, BTree* left = NULL, BTree* right = NULL)
+inline BTree*
+newNode(int val,
+        int height,
+        BTree* parent = NULL,
+        BTree* left = NULL,
+        BTree* right = NULL)
 {
     BTree* node = (BTree*)malloc(sizeof(BTree));
 
     node->value = val;
+    node->height = height;
+
     node->parent = parent;
     node->left = left;
     node->right = right;
@@ -43,10 +49,75 @@ newNode(int val, BTree* parent = NULL, BTree* left = NULL, BTree* right = NULL)
 }
 
 void
+updateHeights(BTree*& t)
+{
+    if (t != NULL) {
+        if (t->parent == NULL)
+            t->height = 0;
+        else
+            t->height = t->parent->height + 1;
+        updateHeights(t->left);
+        updateHeights(t->right);
+    }
+}
+
+inline int
+slope(BTree* t)
+{
+    return t->left->height - t->right->height;
+}
+
+inline void
+rotateLeft(BTree*& t)
+{
+    int y, z;
+    BTree *TLL, *TLRL, *TLRR;
+
+    
+}
+
+inline void
+rotateRight(BTree*& t)
+{
+    int x, y;
+    BTree *TLL, *TLR, *TR;
+
+    x = t->value;
+    y = t->left->value;
+    TLL = t->left->left;
+    TLR = t->left->right;
+    TR = t->right;
+
+    // rotate
+    t->value = y;
+    t->right = t->left;
+    t->right->value = x;
+    t->left = TLL;
+    t->right->left = TLR;
+    t->right->right = TR;
+}
+
+void
+rebalance(BTree*& t)
+{
+    if (slope(t) == 2) {
+        if (slope(t->left) == -1)
+            rotateLeft(t->left);
+        rotateRight(t);
+    }
+
+    if (slope(t) == -2) {
+        if (slope(t->right) == 1)
+            rotateRight(t->right);
+        rotateLeft(t);
+    }
+}
+
+void
 insert(BTree*& t, int val)
 {
     if (t == NULL) {
-        t = newNode(val);
+        t = newNode(val, 0);
         return;
     }
 
@@ -55,7 +126,7 @@ insert(BTree*& t, int val)
 
     if (val < t->value) {
         if (t->left == NULL) {
-            t->left = newNode(val);
+            t->left = newNode(val, t->height + 1);
             t->left->parent = t;
             return;
         } else {
@@ -63,7 +134,7 @@ insert(BTree*& t, int val)
         }
     } else { // val > t->value
         if (t->right == NULL) {
-            t->right = newNode(val);
+            t->right = newNode(val, t->height + 1);
             t->right->parent = t;
             return;
         } else {
@@ -72,7 +143,7 @@ insert(BTree*& t, int val)
     }
 }
 
-BTree* /* is NULL if `val` not found */
+BTree* /* returns NULL if `val` not found */
 find(BTree* t, int val)
 {
     if (t == NULL)
@@ -209,6 +280,7 @@ del(BTree*& t, int val)
             t->parent->left = t->left;
         else
             t->parent->right = t->left;
+        updateHeights(t);
         free(toBeFreed);
         return;
     }
@@ -221,6 +293,7 @@ del(BTree*& t, int val)
             t->parent->left = t->right;
         else
             t->parent->right = t->right;
+        updateHeights(t);
         free(toBeFreed);
         return;
     }
@@ -242,7 +315,7 @@ inOrderTrav(BTree* t)
 {
     if (t != NULL) {
         inOrderTrav(t->left);
-        printf("%d ", t->value);
+        printf("\nval: %4d\theight: %4d", t->value, t->height);
         inOrderTrav(t->right);
     }
 }
@@ -278,11 +351,17 @@ main()
     printf("\nSucc of %d is %d", 2, succ(find(t, 2)));
 
     // delete
-    del(t, -100);
-    del(t, 99);
+    // del(t, -100);
+    // del(t, 99);
     del(t, 56);
     del(t, 2);
     del(t, 25);
+    insert(t, -200);
+    insert(t, -300);
+    insert(t, -400);
+    insert(t, -500);
+    insert(t, -250);
+    insert(t, 0);
 
     /// traversal
     printf("\n");
@@ -293,15 +372,20 @@ main()
     for (int i = 0; i <= 5; ++i)
         insert(t2, i);
 
+    // traversal
+    printf("\n");
+    inOrderTrav(t2);
+    printf("\n");
+
     for (int i = 0; i <= 5; i += 2)
         del(t2, i);
 
-    /// traversal
+    // traversal
     printf("\n");
     inOrderTrav(t2);
     printf("\n");
     */
-    
+
     printf("\n");
     printf("\n");
     return EXIT_SUCCESS;
