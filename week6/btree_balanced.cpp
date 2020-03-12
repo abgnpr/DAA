@@ -48,32 +48,46 @@ newNode(int val,
     return node;
 }
 
+inline void
+updateHeight(BTree*& t)
+{
+    if (!t->left && !t->right)
+        t->height = 0;
+    else if (t->left && t->right)
+        t->height = 1 + std::max(t->left->height, t->right->height);
+    else if (t->left && !t->right)
+        t->height = t->left->height + 1;
+    else if (!t->left && t->right)
+        t->height = t->right->height + 1;
+}
+
 void
-updateHeights(BTree*& t)
+updateTreeHeights(BTree*& t)
 {
     if (t != NULL) {
-        if (t->parent == NULL)
-            t->height = 0;
-        else
-            t->height = t->parent->height + 1;
-        updateHeights(t->left);
-        updateHeights(t->right);
+        // post-order
+        updateTreeHeights(t->left);
+        updateTreeHeights(t->right);
+        updateHeight(t);
     }
 }
 
 inline int
 slope(BTree* t)
 {
+    if (t == NULL)
+        return 0;
+
+    if (!t->left && !t->right)
+        return 0;
+
+    else if (!t->left && t->right)
+        return -1 * t->height;
+
+    else if (t->left && !t->right)
+        return t->height;
+
     return t->left->height - t->right->height;
-}
-
-inline void
-rotateLeft(BTree*& t)
-{
-    int y, z;
-    BTree *TLL, *TLRL, *TLRR;
-
-    
 }
 
 inline void
@@ -89,12 +103,49 @@ rotateRight(BTree*& t)
     TR = t->right;
 
     // rotate
+
     t->value = y;
+
     t->right = t->left;
     t->right->value = x;
+
     t->left = TLL;
+    if (TLL)
+        TLL->parent = t;
+
     t->right->left = TLR;
+
     t->right->right = TR;
+    if (TR)
+        TR->parent = t->right;
+}
+
+inline void
+rotateLeft(BTree*& t)
+{
+    int y, z;
+    BTree *TL, *TRL, *TRR;
+
+    y = t->value;
+    z = t->right->value;
+    TL = t->left;
+    TRL = t->right->left;
+    TRR = t->right->right;
+
+    t->value = z;
+
+    t->left = t->right;
+    t->left->value = y;
+
+    t->left->left = TL;
+    if (TL)
+        TL->parent = t->left;
+
+    t->left->right = TRL;
+
+    t->right = TRR;
+    if (TRR)
+        TRR->parent = t;
 }
 
 void
@@ -121,24 +172,33 @@ insert(BTree*& t, int val)
         return;
     }
 
-    if (val == t->value)
+    if (val == t->value) {
         return;
+    }
 
     if (val < t->value) {
         if (t->left == NULL) {
-            t->left = newNode(val, t->height + 1);
+            t->left = newNode(val, 0);
             t->left->parent = t;
+            updateTreeHeights(t);
             return;
         } else {
             insert(t->left, val);
+            updateTreeHeights(t);
+            rebalance(t);
+            updateTreeHeights(t);
         }
     } else { // val > t->value
         if (t->right == NULL) {
-            t->right = newNode(val, t->height + 1);
+            t->right = newNode(val, 0);
             t->right->parent = t;
+            updateTreeHeights(t);
             return;
         } else {
             insert(t->right, val);
+            updateTreeHeights(t);
+            rebalance(t);
+            updateTreeHeights(t);
         }
     }
 }
@@ -232,7 +292,7 @@ pred(BTree* t)
 void
 del(BTree*& t, int val)
 {
-    BTree* toBeFreed = t;
+    BTree* t_ = t; // t'
 
     if (t == NULL)
         return;
@@ -240,14 +300,22 @@ del(BTree*& t, int val)
     //--- when t.value != val
 
     if (val < t->value) {
-        if (t->left != NULL)
+        if (t->left != NULL) {
             del(t->left, val);
+            updateTreeHeights(t);
+            rebalance(t);
+            updateTreeHeights(t);
+        }
         return;
     }
 
-    if (val > t->value) {
-        if (t->right != NULL)
+    else if (val > t->value) {
+        if (t->right != NULL) {
             del(t->right, val);
+            updateTreeHeights(t);
+            rebalance(t);
+            updateTreeHeights(t);
+        }
         return;
     }
 
@@ -260,41 +328,45 @@ del(BTree*& t, int val)
             t = NULL;
 
         //--- delete leaf
-        else if (t == t->parent->left)
+        else if (t == t->parent->left) {
             t->parent->left = NULL;
-        else
+        } else {
             t->parent->right = NULL;
+        }
 
-        free(toBeFreed);
+        free(t_);
         return;
     }
 
     /* delete node with one child */
 
     //--- only left child
-    if (t->left != NULL && t->right == NULL) {
+    else if (t->left != NULL && t->right == NULL) {
         t->left->parent = t->parent;
-        if (t->parent == NULL) {
+
+        if (t->parent == NULL)
             t = t->left;
-        } else if (t == t->parent->left)
+        else if (t == t->parent->left)
             t->parent->left = t->left;
         else
             t->parent->right = t->left;
-        updateHeights(t);
-        free(toBeFreed);
+
+        free(t_);
         return;
     }
+
     //--- only right child
     else if (t->left == NULL && t->right != NULL) {
         t->right->parent = t->parent;
-        if (t->parent == NULL) {
+
+        if (t->parent == NULL)
             t = t->right;
-        } else if (t == t->parent->left)
+        else if (t == t->parent->left)
             t->parent->left = t->right;
         else
             t->parent->right = t->right;
-        updateHeights(t);
-        free(toBeFreed);
+
+        free(t_);
         return;
     }
 
@@ -308,6 +380,9 @@ del(BTree*& t, int val)
     //    pv : it is either a leaf or
     //         it has a single child
     del(t->left, pv);
+    updateTreeHeights(t);
+    rebalance(t);
+    updateTreeHeights(t);
 }
 
 void
@@ -323,67 +398,50 @@ inOrderTrav(BTree* t)
 int
 main()
 {
-    BTree *t = NULL, *t2 = NULL;
-
-    // insert
-    insert(t, 25);
-    insert(t, 56);
-    insert(t, 2);
-    insert(t, 99);
-    insert(t, -100);
-
-    // traversal
-    printf("\n");
-    inOrderTrav(t);
-    printf("\n");
-
-    // find
-    find(t, 100) ? printf("\nFound\n") : printf("\nNot Found\n");
-
-    // minval and maxval
-    printf("\nMinimum value : %d", minval(t));
-    printf("\nMaximum value : %d", maxval(t));
-
-    // succ and pred
-    printf("\nSucc : %d", succ(t));
-    printf("\nPred : %d", pred(t));
-    // succ of a number
-    printf("\nSucc of %d is %d", 2, succ(find(t, 2)));
-
-    // delete
-    // del(t, -100);
-    // del(t, 99);
-    del(t, 56);
-    del(t, 2);
-    del(t, 25);
-    insert(t, -200);
-    insert(t, -300);
-    insert(t, -400);
-    insert(t, -500);
-    insert(t, -250);
-    insert(t, 0);
-
-    /// traversal
-    printf("\n");
-    inOrderTrav(t);
-    printf("\n");
+    BTree* t = NULL;
 
     /*
-    for (int i = 0; i <= 5; ++i)
-        insert(t2, i);
+        // insert
+        insert(t, 25);
+        insert(t, 56);
+        insert(t, 2);
+        insert(t, 99);
+        insert(t, -100);
 
-    // traversal
-    printf("\n");
-    inOrderTrav(t2);
-    printf("\n");
+        // traversal
+        printf("\n");
+        inOrderTrav(t);
+        printf("\n");
 
-    for (int i = 0; i <= 5; i += 2)
-        del(t2, i);
+        // find
+        find(t, 100) ? printf("\nFound\n") : printf("\nNot Found\n");
 
-    // traversal
-    printf("\n");
-    inOrderTrav(t2);
-    printf("\n");
+        // minval and maxval
+        printf("\nMinimum value : %d", minval(t));
+        printf("\nMaximum value : %d", maxval(t));
+
+        // succ and pred
+        printf("\nSucc : %d", succ(t));
+        printf("\nPred : %d", pred(t));
+        // succ of a number
+        printf("\nSucc of %d is %d", 2, succ(find(t, 2)));
+
+        // traversal
+        printf("\n");
+        inOrderTrav(t);
+        printf("\n");
+    */
+
+    /*
+        for (int i = 0; i <= 1000; ++i)
+            if (i % 2)
+                insert(t, i);
+        for (int i = 0; i <= 1000; ++i)
+            if (i % 2 == 0)
+                insert(t, i);
+
+        for (int i = 1000; i >= 0; i--)
+            del(t, i);
     */
 
     printf("\n");
