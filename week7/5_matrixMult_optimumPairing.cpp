@@ -3,10 +3,53 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct matDim
+void
+print(vector<vector<int>>&);
+
+void
+MMC(vector<int>&);
+
+int
+main()
 {
-    int nR, nC;
-};
+    vector<int> P{ 5, 4, 7, 2, 3 };
+    MMC(P);
+}
+
+void
+MMC(vector<int>& P)
+{
+    int pn = P.size(), inf = 0;
+
+    for (int i = 0; i <= pn - 3; ++i)
+        inf += P[i] * P[i + 1] * P[i + 2];
+    inf += 1;
+
+    int n = pn - 1; // n matrics
+    vector<int> row(n, 0);
+    vector<vector<int>> MMC(n, row);
+    row.clear();
+    // for (int r = 0; r < n-1; ++r)
+    //     MMC[r][r] = 0;
+
+    print(MMC);
+
+    int subprob;
+    for (int c = 1; c < n; ++c) {
+        for (int r = c - 1; r >= 0; --r) {
+            MMC[r][c] = inf;
+            for (int k = r; k < c; ++k) {
+                subprob = MMC[r][k] + MMC[k + 1][c] +
+                          (P.at(k) * P.at(k + 1) * P.at(c + 1));
+                if (subprob < MMC[r][c])
+                    MMC[r][c] = subprob;
+                print(MMC);
+            }
+        }
+    }
+
+    print(MMC);
+}
 
 void
 print(vector<vector<int>>& M)
@@ -17,66 +60,12 @@ print(vector<vector<int>>& M)
     int n = M[0].size();
     for (int i = 0; i < m; ++i) {
         for (int j = 0; j < n; ++j)
-            printf("%4d ", M[i][j]);
-        printf("\n");
+            if (i <= j)
+                printf("%4d ", M[i][j]);
+            else
+                printf("     ");
+        printf("\n\n");
     }
 
     printf("\n");
-}
-
-void
-MMC(vector<matDim>& Mat)
-{
-    int r, c, k, n, inf = 0;
-
-    n = Mat.size();
-
-    for (int i = 1; i < n-1; ++i)
-        inf += Mat[i].nR * Mat[i].nC * Mat[i+1].nC;
-    inf += 1;
-
-    vector<int> row(n, 0);
-    vector<vector<int>> MMC(n, row);
-    row.clear();
-
-    print(MMC);
-
-    for (r = 0; r < n; ++r)
-        MMC[r][r] = 0;
-    
-    print(MMC);
-
-    int subprob;
-    for (c = 1; c < n; ++c) {
-        for (r = c - 1; r >= 0; --r) {
-            MMC[r][c] = inf;
-            for (k = r; k < c; ++k) {
-                subprob = MMC[r][k] + MMC[k+1][c] +
-                          (Mat[r].nR * Mat[k].nC * Mat[c].nC);
-                if (subprob < MMC[r][c])
-                    MMC[r][c] = subprob;
-            }
-        }
-    }
-
-    print(MMC);
-}
-
-int
-main()
-{
-    int n, nR, nC;
-    vector<matDim> Mat;
-
-    scanf("%d", &n);
-    for (int i = 0; i < n; ++i) {
-        scanf("%d %d", &nR, &nC);
-        if (i != 0 && Mat[i - 1].nC != nR) {
-            throw invalid_argument("Incompatible matrix dimension");
-            return 1;
-        }
-        Mat.push_back({ nR, nC });
-    }
-
-    MMC(Mat);
 }
